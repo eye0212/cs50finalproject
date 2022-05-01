@@ -1,3 +1,4 @@
+from ast import BinOp
 import os
 
 # test
@@ -8,8 +9,11 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 import datetime
+from PIL import Image 
+import PIL 
+import os, sys
 
-from helpers import apology, login_required
+from helpers import apology, login_required, convertToBinaryData
 
 # Configure application
 app = Flask(__name__)
@@ -104,6 +108,10 @@ def register():
         email = request.form.get("email")
         age = request.form.get("age")
         location = request.form.get("location")
+
+        #photo = request.form.get('photo')
+        #print(type(photo))
+
         if not username or not password or not confirmation or not email or not age or not location:
             return apology("All fields are required.", 400)
         if password != confirmation:
@@ -114,6 +122,25 @@ def register():
         for profile in db.execute("SELECT email FROM users"):
             if profile["email"] == email:
                 return apology("This email is already associated with an account.", 400)
+        #print(os.getcwd())
+        #photo.save(f"/photos/{username}.png")
         db.execute("INSERT INTO users (username, hash, email, age, location) VALUES (?, ?, ?, ?, ?)", username, generate_password_hash(password), email, age, location)
         session["user_id"] = db.execute("SELECT id FROM users WHERE username = ?", username)[0]["id"]
         return redirect("/")
+
+
+@app.route("/musicians")
+@login_required
+def musicians():
+    """Show eligible musicians"""
+
+    mus_list = db.execute("SELECT * FROM users")
+    return render_template("musicians.html", mus_list=mus_list)
+
+@app.route("/musicians")
+@login_required
+def musicquiz():
+    """Test template for now"""
+
+    mus_list = db.execute("SELECT * FROM users")
+    return render_template("musicquiz.html", mus_list=mus_list)

@@ -33,3 +33,10 @@ def login_required(f):
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
+
+
+def convertToBinaryData(filename): # Adapted from https://www.geeksforgeeks.org/how-to-insert-image-in-sqlite-using-python/:
+  # Convert binary format to images or files data
+  with open(filename, 'rb') as file:
+      blobData = file.read()
+  return blobData
