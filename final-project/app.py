@@ -59,18 +59,18 @@ def login():
 
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 403)
+            return apology("must provide username", 400)
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 403)
+            return apology("must provide password", 400)
 
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
+            return apology("invalid username and/or password", 400)
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -108,11 +108,12 @@ def register():
         email = request.form.get("email")
         age = request.form.get("age")
         location = request.form.get("location")
+        name = request.form.get("name")
 
         #photo = request.form.get('photo')
         #print(type(photo))
 
-        if not username or not password or not confirmation or not email or not age or not location:
+        if not username or not password or not confirmation or not email or not age or not location or not name:
             return apology("All fields are required.", 400)
         if password != confirmation:
             return apology("Passwords do not match.", 400)
@@ -124,20 +125,36 @@ def register():
                 return apology("This email is already associated with an account.", 400)
         #print(os.getcwd())
         #photo.save(f"/photos/{username}.png")
-        db.execute("INSERT INTO users (username, hash, email, age, location) VALUES (?, ?, ?, ?, ?)", username, generate_password_hash(password), email, age, location)
+        db.execute("INSERT INTO users (username, hash, email, age, location, name) VALUES (?, ?, ?, ?, ?, ?)", username, generate_password_hash(password), email, age, location, name)
         session["user_id"] = db.execute("SELECT id FROM users WHERE username = ?", username)[0]["id"]
         return redirect("/")
 
 
-@app.route("/musicians")
+@app.route("/musicians", methods=["GET", "POST"])
 @login_required
 def musicians():
     """Show eligible musicians"""
+    if request.method == "GET":
+        mus_list = db.execute("SELECT * FROM users")
+        return render_template("musicians.html", mus_list=mus_list)
+    else:
+        age = request.form.get("age")
+        location = request.form.get("location")
+        name = request.form.get("name")
+        if not age:
+            age = "%%"
+        if not location:
+            location = "%%"
+        if not name:
+            name = "%%"
+        else: 
+            name = f"%{name}%"
+        mus_list = db.execute("SELECT * FROM users WHERE name LIKE ? AND age LIKE ? AND location LIKE ?", name, age, location)
+        return render_template("musicians.html", mus_list=mus_list)
 
-    mus_list = db.execute("SELECT * FROM users")
-    return render_template("musicians.html", mus_list=mus_list)
 
-@app.route("/musicians")
+
+@app.route("/musicquiz")
 @login_required
 def musicquiz():
     """Test template for now"""
