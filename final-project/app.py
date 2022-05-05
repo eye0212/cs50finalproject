@@ -4,14 +4,17 @@ import os
 # test
 
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
 import datetime
+from PIL import Image 
+import PIL 
 import os, sys
 
-from helpers import apology, login_required, convertToBinaryData
+from helpers import apology, login_required, convertToBinaryData, allowed_file
 
 # Configure application
 app = Flask(__name__)
@@ -25,6 +28,12 @@ app.config["TEMPLATES_AUTO_RELOAD"] = True
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+
+# Prepare app.py for file upload
+UPLOAD_FOLDER = '/static/images'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 Session(app)
 
 
@@ -90,7 +99,7 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
-@app.route("/register", methods=["GET", "POST"])
+@app.route("/register", methods=["GET", "POST"]) ## Some code adapted from https://flask.palletsprojects.com/en/2.1.x/patterns/fileuploads/
 def register():
     """Register user"""
 
@@ -107,24 +116,40 @@ def register():
         age = request.form.get("age")
         location = request.form.get("location")
         name = request.form.get("name")
+        file = request.files['file']
 
-        #photo = request.form.get('photo')
-        #print(type(photo))
-
-        if not username or not password or not confirmation or not email or not age or not location or not name:
-            return apology("All fields are required.", 400)
+        # Check that all fields are completed
+        if not username or not password or not confirmation or not email or not age or not location or not name or not file:
+            flash('All fields are required')
+            return render_template("register.html")
+        # Check that passwords match
         if password != confirmation:
-            return apology("Passwords do not match.", 400)
+            flash('Passwords do not match.')
+            return render_template("register.html")
+        # Check that username is unique
         for profile in db.execute("SELECT username FROM users"):
             if profile["username"] == username:
-                return apology("This username is taken.", 400)
+                flash('This username is taken.')
+                return render_template("register.html")
+        # Check that email is unique
         for profile in db.execute("SELECT email FROM users"):
             if profile["email"] == email:
-                return apology("This email is already associated with an account.", 400)
-        #print(os.getcwd())
-        #photo.save(f"/photos/{username}.png")
+                flash('This username is already associated with an account.')
+                return render_template("register.html")
+
+        # Check to make sure file is right format:
+        if not allowed_file(file.filename):
+            return apology("not allowed file", 400)
+    
+        # Set session to user ID
         db.execute("INSERT INTO users (username, hash, email, age, location, name) VALUES (?, ?, ?, ?, ?, ?)", username, generate_password_hash(password), email, age, location, name)
         session["user_id"] = db.execute("SELECT id FROM users WHERE username = ?", username)[0]["id"]
+
+        # Upload file to server (while protecting against malicious users)
+        filename = secure_filename(f'{session["user_id"]}.png')
+        file.save(os.path.join(app.root_path, 'static', 'images', filename))
+
+        # Redirect to homepage
         return redirect("/")
 
 
