@@ -70,6 +70,14 @@ def match(user_id):
 
     all_q1 = db.execute("SELECT q1 FROM answers")
 
+    qs = ['Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8', 'Q9', 'Q10']
+
+    ans = ['1', '2', '3', '4', '5']
+
+    sql_query = pd.read_sql_query (''' SELECT * FROM answers ''', db)
+
+    df = pd.DataFrame(sql_query, columns = ['id', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10'])
+
     answers = pd.DataFrame(index=men.index, columns=women.index)
 
     for i in ratings.columns:
