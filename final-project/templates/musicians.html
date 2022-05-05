@@ -86,12 +86,13 @@
   <button class="btn btn-primary" type="submit">Filter</button>
 </form>
 
-<table class="table tablestriped" id="myTable"> <!--Adapted from: https://www.w3schools.com/howto/howto_js_filter_table.asp -->
+<table class="table tablestriped" id="myTable"> 
   <tr class="header">
     <th>Name</th>
     <th>Age</th>
     <th>Location</th>
     <th>Email</th>
+    <th>Headshot</th>
   </tr>
     {% for musician in mus_list %}
         <tr>
@@ -99,65 +100,12 @@
             <td>{{ musician.age }}</td>
             <td>{{ musician.location }}</td>
             <td>{{ musician.email }}</td>
+            <td><img src="/static/images/{{ musician.id }}.png" alt="{{ musician.name }}" height=100 class="centeredimage"></td>
         </tr>
     {% endfor %}
 </table>
 
-<!--
-<script>
-    function myFunction() {
-      // Declare variables 
-      var input, filter, table, tr, td, i, txtValue;
-      input_name = document.getElementById("myInput_name");
-      input_location = document.getElementById("myInput_location");
-      filter_name = input_name.value.toUpperCase();
-      filter_location = input_location.value.toUpperCase();
-      table = document.getElementById("myTable");
-      tr = table.getElementsByTagName("tr");
-    
-      // Loop through all table rows, and hide those who don't match the search query
-      for (i = 0; i < tr.length; i++) {
-        td_name = tr[i].getElementsByTagName("td")[0];
-        td_location = tr[i].getElementsByTagName("td")[2];
-        if (td_name) 
-        {
-          txtValue_name = td_name.textContent || td_name.innerText;
-          txtValue_location = td_location.textContent || td_location.innerText;
-          if (txtValue_name.toUpperCase().indexOf(filter_name) > -1) && (txtValue_location.toUpperCase().indexOf(filter_location) > -1)
-          {
-            tr[i].style.display = "";
-          } 
-          else 
-          {
-            tr[i].style.display = "none";
-          }
-        } 
-      }
-    }
 
-    function myFunction_locations() 
-    {
-      // Declare variables 
-      var input, filter, table, tr, td, i, txtValue;
-      input = document.getElementById("myInput_location");
-      filter = input.value.toUpperCase();
-      table = document.getElementById("myTable");
-      tr = table.getElementsByTagName("tr");
-    
-      // Loop through all table rows, and hide those who don't match the search query
-      for (i = 0; i < tr.length; i++) {
-        td = tr[i].getElementsByTagName("td")[2];
-        if (td) {
-          txtValue = td.textContent || td.innerText;
-          if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            tr[i].style.display = "";
-          } else {
-            tr[i].style.display = "none";
-          }
-        } 
-      }
-    }
-    </script>
--->
+
     
 {% endblock %}

@@ -31,7 +31,6 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 # Prepare app.py for file upload
 UPLOAD_FOLDER = '/static/images'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 Session(app)
