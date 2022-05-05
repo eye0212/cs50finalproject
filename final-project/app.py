@@ -9,8 +9,6 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 import datetime
-from PIL import Image 
-import PIL 
 import os, sys
 
 from helpers import apology, login_required, convertToBinaryData
