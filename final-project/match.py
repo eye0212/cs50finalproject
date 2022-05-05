@@ -56,38 +56,21 @@ def musicquiz():
 
 
 
-def match():
-    name = request.form.get("name")
+def match(user_id):
 
-    username = "SELECT * FROM users WHERE name LIKE ?", name)
+    user_q1 = db.execute("SELECT q1 FROM answers WHERE id LIKE ?", user_id)
+    user_q2 = db.execute("SELECT q2 FROM answers WHERE id LIKE ?", user_id)
+    user_q3 = db.execute("SELECT q3 FROM answers WHERE id LIKE ?", user_id)
+    user_q4 = db.execute("SELECT q4 FROM answers WHERE id LIKE ?", user_id)
+    user_q5 = db.execute("SELECT q5 FROM answers WHERE id LIKE ?", user_id)
+    user_q6 = db.execute("SELECT q6 FROM answers WHERE id LIKE ?", user_id)
+    user_q7 = db.execute("SELECT q7 FROM answers WHERE id LIKE ?", user_id)
+    user_q8 = db.execute("SELECT q8 FROM answers WHERE id LIKE ?", user_id)
+    user_q9 = db.execute("SELECT q9 FROM answers WHERE id LIKE ?", user_id)
+    user_q10 = db.execute("SELECT q10 FROM answers WHERE id LIKE ?", user_id)
 
-    username = db.execute("SELECT username FROM users ")
-
-    name = db.execute("SELECT name FROM answers")
+    all_q1 = db.execute("SELECT q1 FROM answers")
 
 
 
-    q1 = db.execute("SELECT q1 FROM answers")
-
-
-
-
-
-    if request.method == "GET":
-        mus_list = db.execute("SELECT * FROM users")
-        return render_template("musicians.html", mus_list=mus_list)
-
-    else:
-        age = request.form.get("age")
-        location = request.form.get("location")
-        name = request.form.get("name")
-        if not age:
-            age = "%%"
-        if not location:
-            location = "%%"
-        if not name:
-            name = "%%"
-        else: 
-            name = f"%{name}%"
-        mus_list = db.execute("SELECT * FROM users WHERE name LIKE ? AND age LIKE ? AND location LIKE ?", name, age, location)
-        return render_template("musicians.html", mus_list=mus_list)
+    return redirect("/")
