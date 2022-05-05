@@ -6,7 +6,6 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
-import datetime
 import os, sys
 
 import pandas as pd
@@ -71,6 +70,9 @@ def match(user_id):
 
     all_q1 = db.execute("SELECT q1 FROM answers")
 
+    answers = pd.DataFrame(index=men.index, columns=women.index)
 
+    for i in ratings.columns:
+        ratings[i] = random.choices([0,1,"unseen"], k=num)
 
     return redirect("/")
