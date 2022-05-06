@@ -1,16 +1,12 @@
 from ast import BinOp
-import os
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
-import os, sys
 
-import pandas as pd
-import random
-import numpy as np
+import math
 
 from helpers import apology, login_required, convertToBinaryData
 
@@ -57,15 +53,15 @@ def categorize(username):
 
     # get all answers from current user 
     user_q1 = db.execute("SELECT q1 FROM answers WHERE username LIKE ?", username)
-    user_q2 = db.execute("SELECT q2 FROM answers WHERE id LIKE ?", username)
-    user_q3 = db.execute("SELECT q3 FROM answers WHERE id LIKE ?", username)
-    user_q4 = db.execute("SELECT q4 FROM answers WHERE id LIKE ?", username)
-    user_q5 = db.execute("SELECT q5 FROM answers WHERE id LIKE ?", username)
-    user_q6 = db.execute("SELECT q6 FROM answers WHERE id LIKE ?", username)
-    user_q7 = db.execute("SELECT q7 FROM answers WHERE id LIKE ?", username)
-    user_q8 = db.execute("SELECT q8 FROM answers WHERE id LIKE ?", username)
-    user_q9 = db.execute("SELECT q9 FROM answers WHERE id LIKE ?", username)
-    user_q10 = db.execute("SELECT q10 FROM answers WHERE id LIKE ?", username)
+    user_q2 = db.execute("SELECT q2 FROM answers WHERE username LIKE ?", username)
+    user_q3 = db.execute("SELECT q3 FROM answers WHERE username LIKE ?", username)
+    user_q4 = db.execute("SELECT q4 FROM answers WHERE username LIKE ?", username)
+    user_q5 = db.execute("SELECT q5 FROM answers WHERE username LIKE ?", username)
+    user_q6 = db.execute("SELECT q6 FROM answers WHERE username LIKE ?", username)
+    user_q7 = db.execute("SELECT q7 FROM answers WHERE username LIKE ?", username)
+    user_q8 = db.execute("SELECT q8 FROM answers WHERE username LIKE ?", username)
+    user_q9 = db.execute("SELECT q9 FROM answers WHERE username LIKE ?", username)
+    user_q10 = db.execute("SELECT q10 FROM answers WHERE username LIKE ?", username)
 
     # put answers into a list for easier processing 
     answers = [
@@ -95,4 +91,37 @@ def categorize(username):
             score[0] = score[0] - 1
             score[1] = score[1] - 1
 
+    db.execute("UPDATE answers SET score_x = ?, score_y = ? WHERE username = ?", score[0], score[1], username)
+
     return score
+
+def match(score):
+
+    for i in range()
+    
+    # Coordinates of Point user's points
+    Px = 3 
+    Py = 7
+    
+    # Coordinates of point Q
+    Qx = -5
+    Qy = -9
+    
+    # Calculate the Euclidean distance 
+    # between points P and Q
+    eDistance = math.dist([Px, Py], [Qx, Qy])
+    print(eDistance)
+    
+    
+    # Three-dimensional point
+    
+    # Coordinates of Point P
+    P = [3, 6, 9]
+    
+    # Coordinates of point Q
+    Q = [1, 0, -2] 
+    
+    # Calculate the Euclidean distance 
+    # between points P and Q
+    eDistance = math.dist(P, Q)
+    print(eDistance)
