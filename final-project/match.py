@@ -47,10 +47,6 @@ def musicquiz():
 
     mus_list = db.execute("INSERT INTO answers (q1, q2, q3, q4, q5, q6, q7, q8, q9, q10) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", q1, q2, q3, q4, q5, q6, q7, q8, q9, q10)
 
-
-
-
-
     return render_template("musicquiz.html", mus_list=mus_list)
 
 
@@ -85,7 +81,7 @@ def categorize(username):
         user_q10
     ]
 
-    score = (0, 0)
+    score = [0, 0]
 
     for answer in answers:
         if answer == "a":
