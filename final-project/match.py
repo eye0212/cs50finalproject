@@ -55,7 +55,11 @@ def musicquiz():
 
 
 
-def match(user_id):
+def categorize(user_id):
+
+    # note to fill answer table as well as user table with ids every time new person is made
+
+    # get all answers from current user 
 
     user_q1 = db.execute("SELECT q1 FROM answers WHERE id LIKE ?", user_id)
     user_q2 = db.execute("SELECT q2 FROM answers WHERE id LIKE ?", user_id)
@@ -68,6 +72,17 @@ def match(user_id):
     user_q9 = db.execute("SELECT q9 FROM answers WHERE id LIKE ?", user_id)
     user_q10 = db.execute("SELECT q10 FROM answers WHERE id LIKE ?", user_id)
 
+    # algorithm to weigh the questions from the quiz to determine which category they fall into
+    category1_index = user_q1 * 2 + user_q2 * 1.5
+    category2_index = user_q3 * 2 + user_q4 * 1.5
+    category3_index = user_q5 * 2 + user_q6 * 1.5
+    category4_index = user_q7 * 2 + user_q8 * 1.5
+    category5_index = user_q9 * 2 + user_q10 * 1.5
+
+
+
+
+
     all_q1 = db.execute("SELECT q1 FROM answers")
 
     qs = ['Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8', 'Q9', 'Q10']
@@ -77,6 +92,9 @@ def match(user_id):
     sql_query = pd.read_sql_query (''' SELECT * FROM answers ''', db)
 
     df = pd.DataFrame(sql_query, columns = ['id', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'q7', 'q8', 'q9', 'q10'])
+
+    df.loc[:,"q1"]
+
 
     answers = pd.DataFrame(index=men.index, columns=women.index)
 
