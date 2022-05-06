@@ -97,7 +97,12 @@ def categorize(username):
 
 def match(score):
 
-    for i in range()
+    #number of users
+
+    users_num = db.execute("SELECT COUNT(id) as count_pet FROM answers")
+
+    for i in range(users_num):
+        
     
     # Coordinates of Point user's points
     Px = 3 
