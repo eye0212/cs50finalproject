@@ -175,52 +175,24 @@ def musicians():
         return render_template("musicians.html", mus_list=mus_list)
 
 
-quiz_host = os.environ.get('FLASK_HOST')
-quiz_port = os.environ.get('FLASK_PORT')
-
-questions = [
-    {
-        "id": "1",
-        "question": "What is the Capital of Syria?",
-        "answers": ["a) Beirut", "b) Damascus", "c) Baghdad"],
-        "correct": "b) Damascus"
-    },
-    {
-        "id": "2",
-        "question": "What is the square root of Pi?",
-        "answers": ["a) 1.7724", "b) 1.6487", "c) 1.7872"],
-        "correct": "a) 1.7724"
-    },
-    {
-        "id": "3",
-        "question": "How many counties are there in England?",
-        "answers": ["a) 52", "b) 48", "c) 45"],
-        "correct": "b) 48"
-    }
-]
-
-
 @app.route("/musicquiz", methods=['POST', 'GET'])
 @login_required
 def musicquiz():
     if request.method == 'GET':
         return render_template("index.html", data=questions)
     else:
-        result = 0
-        total = 0
-        for question in questions:
-            if request.form[question.get('id')] == question.get('correct'):
-                result += 1
-            total += 1
-        return render_template('results.html', total=total, result=result)
+        q1_response = request.form['q1']
+        q2_response = request.form['q2']
+        q3_response = request.form['q3']
+        q4_response = request.form['q4']
+        q5_response = request.form['q5']
+        q6_response = request.form['q6']
+        q7_response = request.form['q7']
+        q8_response = request.form['q8']
+        q9_response = request.form['q9']
+        q10_response = request.form['q10']
 
-@app.route("/musicquiz")
-@login_required
-def musicquiz():
-    """Test template for now"""
 
-    mus_list = db.execute("SELECT * FROM users")
-    return render_template("musicquiz.html", mus_list=mus_list)
 
 
 if __name__ == "__main__":

@@ -9,17 +9,59 @@
     <div>
         <h1>welcome to the matching quiz!</h1>
         <br>
-        <form action="/quiz" method="post">
-            {% for question in data %}
-            <h2>{{ question.question }}</h2>
-
-            {% for answer in question.answers %}
-            <input type="radio" id="{{ answer }}" name="{{ question.id }}" value="{{ answer }}"> {{ answer }}<br>
-            {% endfor %}
-
-            {% endfor %}
+        <form name="questions" action="/musicquiz" method="post">
+            <p>q1</p>
+            <input type="radio" name="q1" value="a" /> a
+            <input type="radio" name="q1" value="b" /> b
+            <input type="radio" name="q1" value="c" /> c
+            <input type="radio" name="q1" value="d" /> d
+            <p style="margin-top: 30px;">q2</p>
+            <input type="radio" name="q2" value="a" /> a
+            <input type="radio" name="q2" value="b" /> b
+            <input type="radio" name="q2" value="c" /> c
+            <input type="radio" name="q2" value="d" /> d
+            <p style="margin-top: 30px;">q3</p>
+            <input type="radio" name="q3" value="a" /> a
+            <input type="radio" name="q3" value="b" /> b
+            <input type="radio" name="q3" value="c" /> c
+            <input type="radio" name="q3" value="d" /> d
+            <p style="margin-top: 30px;">q4</p>
+            <input type="radio" name="q4" value="a" /> a
+            <input type="radio" name="q4" value="b" /> b
+            <input type="radio" name="q4" value="c" /> c
+            <input type="radio" name="q4" value="d" /> d
+            <p style="margin-top: 30px;">q5</p>
+            <input type="radio" name="q5" value="a" /> a
+            <input type="radio" name="q5" value="b" /> b
+            <input type="radio" name="q5" value="c" /> c
+            <input type="radio" name="q5" value="d" /> d
+            <p style="margin-top: 30px;">q6</p>
+            <input type="radio" name="q6" value="a" /> a
+            <input type="radio" name="q6" value="b" /> b
+            <input type="radio" name="q6" value="c" /> c
+            <input type="radio" name="q6" value="d" /> d
+            <p style="margin-top: 30px;">q7</p>
+            <input type="radio" name="q7" value="a" /> a
+            <input type="radio" name="q7" value="b" /> b
+            <input type="radio" name="q7" value="c" /> c
+            <input type="radio" name="q7" value="d" /> d
+            <p style="margin-top: 30px;">q8</p>
+            <input type="radio" name="q8" value="a" /> a
+            <input type="radio" name="q8" value="b" /> b
+            <input type="radio" name="q8" value="c" /> c
+            <input type="radio" name="q8" value="d" /> d
+            <p style="margin-top: 30px;">q9</p>
+            <input type="radio" name="q9" value="a" /> a
+            <input type="radio" name="q9" value="b" /> b
+            <input type="radio" name="q9" value="c" /> c
+            <input type="radio" name="q9" value="d" /> d
+            <p style="margin-top: 30px;">q10</p>
+            <input type="radio" name="q10" value="a" /> a
+            <input type="radio" name="q10" value="b" /> b
+            <input type="radio" name="q10" value="c" /> c
+            <input type="radio" name="q10" value="d" /> d
             <br>
-            <input type="submit" value="Submit" name="Submit"/>
+            <input style="margin-top: 50px;" type="submit" value="Submit" name="Submit"/>
         </form>
     </div>
 </body>

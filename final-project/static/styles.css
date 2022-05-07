@@ -261,8 +261,6 @@ footer {
     .parallax_videos p{
         margin:0;
     }
-
-
 }
 
 /* scroll down button taken from https://codepen.io/Web_Cifar/pen/WNwvOaE */
@@ -323,7 +321,7 @@ form label {
 }
 
 form {
-    padding-bottom: 300px;
+    padding-bottom: 30px;
     width: 100%;
 }
 
