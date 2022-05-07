@@ -52,7 +52,6 @@ def index():
     return render_template("index.html")
 
 
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
@@ -192,8 +191,6 @@ def musicquiz():
         q9_response = request.form['q9']
         q10_response = request.form['q10']
 
-
-
-
-if __name__ == "__main__":
-    app.run(host=quiz_host, port=quiz_port)
+        username = request.form.get("username")        
+        db.execute("INSERT INTO answers (q1, q2, q3, q4, q5, q6, q7, q8, q9, 10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) WHERE username LIKE ", q1_response, q2_response, q3_response, q4_response, q5_response, q6_response, q7_response, q8_response, q9_response, q10_response, username)
+        session["user_id"] = db.execute("SELECT id FROM users WHERE username = ?", username)[0]["id"] # not sure if this is necessary review with Alex and if so implement into match and score functions in match.py
