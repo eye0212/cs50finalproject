@@ -179,7 +179,7 @@ def musicians():
 @login_required
 def musicquiz():
     if request.method == 'GET':
-        return render_template("index.html", data=questions)
+        return render_template("musicquiz.html")
     else:
         q1_response = request.form['q1']
         q2_response = request.form['q2']
