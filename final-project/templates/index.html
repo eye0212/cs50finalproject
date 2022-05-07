@@ -1,14 +1,23 @@
 {% extends "layout.html" %}
-
-{% block title %}
-    Log In
-{% endblock %}
-
 {% block main %}
-    <h3>
-        Welcome
-    </h3>
-    <br>
-    <img src="/static/logo.png" width="240" height="240" alt="logo" class="centeredimage">
-
+<div>
+    <body>
+        <section id="showcase">
+            <div class="parallax_index" id="sec-1">
+                <section id="sec-1">
+                      <a href="#sec-2">
+                        <div class="scroll-down"></div>
+                      </a>
+                  </section>
+                <h1 style="text-align: center; position: relative; bottom: 70px;">welcome</h1>
+            </div>
+            <div class="parallax_index" id="sec-2" style="padding-bottom: 200px;">
+                <h1>about subito</h1>
+                <p>
+                    Subito is a CS50 Final Project made by Alex Tonelli and Eugene Ye. The purpose of the website is to 
+                    try and match users based on their classical music tastes! We hope that you enjoy our product.
+                </p>
+            </div>
+        </section>
+   </body>
 {% endblock %}
