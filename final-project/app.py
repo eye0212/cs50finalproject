@@ -159,6 +159,7 @@ def musicians():
         mus_list = db.execute("SELECT * FROM users")
         return render_template("musicians.html", mus_list=mus_list)
     else:
+        # get age, location, and name from current user
         age = request.form.get("age")
         location = request.form.get("location")
         name = request.form.get("name")
@@ -180,6 +181,8 @@ def musicquiz():
     if request.method == 'GET':
         return render_template("musicquiz.html")
     else:
+
+        # get responses form current user when they take the musician quiz
         q1_response = request.form['q1']
         q2_response = request.form['q2']
         q3_response = request.form['q3']
@@ -191,6 +194,17 @@ def musicquiz():
         q9_response = request.form['q9']
         q10_response = request.form['q10']
 
-        username = request.form.get("username")        
-        db.execute("INSERT INTO answers (q1, q2, q3, q4, q5, q6, q7, q8, q9, 10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) WHERE username LIKE ", q1_response, q2_response, q3_response, q4_response, q5_response, q6_response, q7_response, q8_response, q9_response, q10_response, username)
+        username = request.form.get("username")     
+
+        # insert answers into sql database   
+        ans_list = db.execute("INSERT INTO answers (q1, q2, q3, q4, q5, q6, q7, q8, q9, 10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) WHERE username LIKE ", q1_response, q2_response, q3_response, q4_response, q5_response, q6_response, q7_response, q8_response, q9_response, q10_response, username)
         session["user_id"] = db.execute("SELECT id FROM users WHERE username = ?", username)[0]["id"] # not sure if this is necessary review with Alex and if so implement into match and score functions in match.py
+        
+        return render_template("musicians.html", ans_list = ans_list) # i'm really not sure what this does but the form won't submit right now
+
+# things left to do: 
+# make sure form can take answers
+# make sure algorithm works and can provide match scores by 1. pulling from sql and 2. uploading the scores into sql
+# make sure new users' information is also added to the answers database
+# make sure the user can see the results of their quiz, make questions for the quiz
+# maybe make a profile page, maybe make a 

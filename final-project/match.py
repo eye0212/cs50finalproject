@@ -78,21 +78,22 @@ def categorize(username):
         user_q10
     ]
 
-    score = [0, 0]
+    score = [0, 0, 0, 0]
 
     for answer in answers:
         if answer == "a":
             score[0] += 1
         if answer == "b":
-            score[0] += 1
             score[1] += 1
         if answer == "c":
-            score[1] = score[1] - 1
+            score[2] += 1
         if answer == "d":
-            score[0] = score[0] - 1
-            score[1] = score[1] - 1
+            score[3] += 1
 
-    db.execute("UPDATE answers SET score_x = ?, score_y = ? WHERE username = ?", score[0], score[1], username)
+    # this function assigns every person a score in R4 and returns it after putting it into the SQL 
+    # database table called answers
+
+    db.execute("UPDATE answers SET score_x = ?, score_y = ?, score_z = ?, score_t = ? WHERE username = ?", score[0], score[1], score[2], score[3], username)
 
     return score
 
@@ -110,11 +111,15 @@ def match(score):
     for i in range(users_num):
         Px = score[0]
         Py = score[1]
+        Pz = score[2]
+        Pt = score[3]
 
         Qx = db.execute("SELECT score_x FROM answers WHERE username LIKE ?", usernames[i])
         Qy = db.execute("SELECT score_y FROM answers WHERE username LIKE ?", usernames[i])
+        Qz = db.execute("SELECT score_z FROM answers WHERE username LIKE ?", usernames[i])
+        Qt = db.execute("SELECT score_t FROM answers WHERE username LIKE ?", usernames[i])
 
-        eDistance = math.dist([Px, Py], [Qx, Qy])
+        eDistance = math.dist([Px, Py, Pz, Pt], [Qx, Qy, Qz, Qt])
         compatability.append(eDistance)
 
     # normalize compatability_scores to get value between 0 and 1
@@ -125,3 +130,7 @@ def match(score):
     
     for i in range(len(usernames)):
         compatability_dict[usernames[i]] = normalized[i]
+
+    # this function returns a dictionary that has every user and the compatability score assigned with that user
+
+    return compatability_dict
