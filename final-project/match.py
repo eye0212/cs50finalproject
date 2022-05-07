@@ -7,6 +7,7 @@ from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 
 import math
+from sklearn import preprocessing
 
 from helpers import apology, login_required, convertToBinaryData
 
@@ -101,32 +102,26 @@ def match(score):
 
     users_num = db.execute("SELECT COUNT(id) as count_pet FROM answers")
 
+    usernames = list(db.execute("SELECT username FROM answers"))
+
+    compatability = []
+
+    # get the compatability scores for each person relative to user by taking distance 
     for i in range(users_num):
-        
+        Px = score[0]
+        Py = score[1]
+
+        Qx = db.execute("SELECT score_x FROM answers WHERE username LIKE ?", usernames[i])
+        Qy = db.execute("SELECT score_y FROM answers WHERE username LIKE ?", usernames[i])
+
+        eDistance = math.dist([Px, Py], [Qx, Qy])
+        compatability.append(eDistance)
+
+    # normalize compatability_scores to get value between 0 and 1
+    normalized = preprocessing.normalize(compatability)
+
+    # organize usernames and compatability into a dictionary to better represent data
+    compatability_dict = {}
     
-    # Coordinates of Point user's points
-    Px = 3 
-    Py = 7
-    
-    # Coordinates of point Q
-    Qx = -5
-    Qy = -9
-    
-    # Calculate the Euclidean distance 
-    # between points P and Q
-    eDistance = math.dist([Px, Py], [Qx, Qy])
-    print(eDistance)
-    
-    
-    # Three-dimensional point
-    
-    # Coordinates of Point P
-    P = [3, 6, 9]
-    
-    # Coordinates of point Q
-    Q = [1, 0, -2] 
-    
-    # Calculate the Euclidean distance 
-    # between points P and Q
-    eDistance = math.dist(P, Q)
-    print(eDistance)
+    for i in range(len(usernames)):
+        compatability_dict[usernames[i]] = normalized[i]
