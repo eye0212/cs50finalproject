@@ -31,16 +31,16 @@ def categorize(id):
     # note to fill answer table as well as user table with ids every time new person is made
 
     # get all answers from current user 
-    user_q1 = db.execute("SELECT q1 FROM users WHERE id = ?", id)
-    user_q2 = db.execute("SELECT q2 FROM users WHERE id = ?", id)
-    user_q3 = db.execute("SELECT q3 FROM users WHERE id = ?", id)
-    user_q4 = db.execute("SELECT q4 FROM users WHERE id = ?", id)
-    user_q5 = db.execute("SELECT q5 FROM users WHERE id = ?", id)
-    user_q6 = db.execute("SELECT q6 FROM users WHERE id = ?", id)
-    user_q7 = db.execute("SELECT q7 FROM users WHERE id = ?", id)
-    user_q8 = db.execute("SELECT q8 FROM users WHERE id = ?", id)
-    user_q9 = db.execute("SELECT q9 FROM users WHERE id = ?", id)
-    user_q10 = db.execute("SELECT q10 FROM users WHERE id = ?", id)
+    user_q1 = db.execute("SELECT q1 FROM users WHERE id = ?", id)[0]["q1"]
+    user_q2 = db.execute("SELECT q2 FROM users WHERE id = ?", id)[0]["q2"]
+    user_q3 = db.execute("SELECT q3 FROM users WHERE id = ?", id)[0]["q3"]
+    user_q4 = db.execute("SELECT q4 FROM users WHERE id = ?", id)[0]["q4"]
+    user_q5 = db.execute("SELECT q5 FROM users WHERE id = ?", id)[0]["q5"]
+    user_q6 = db.execute("SELECT q6 FROM users WHERE id = ?", id)[0]["q6"]
+    user_q7 = db.execute("SELECT q7 FROM users WHERE id = ?", id)[0]["q7"]
+    user_q8 = db.execute("SELECT q8 FROM users WHERE id = ?", id)[0]["q8"]
+    user_q9 = db.execute("SELECT q9 FROM users WHERE id = ?", id)[0]["q9"]
+    user_q10 = db.execute("SELECT q10 FROM users WHERE id = ?", id)[0]["q10"]
 
     # put answers into a list for easier processing 
     answers = [
@@ -78,9 +78,13 @@ def match(score):
 
     #number of users
 
-    users_num = db.execute("SELECT COUNT(*) FROM users")
+    users_num = db.execute("SELECT COUNT(*) FROM users")[0]["COUNT(*)"]
 
-    ids = list(db.execute("SELECT id FROM users"))
+    lis = db.execute("SELECT id FROM users")
+    print(lis)
+    ids = []
+    for id in lis:
+        ids.append(id["id"])
 
     compatability = []
 
@@ -91,22 +95,24 @@ def match(score):
         Pz = score[2]
         Pt = score[3]
 
-        Qx = db.execute("SELECT score_x FROM users WHERE id = ?", ids[i])
-        Qy = db.execute("SELECT score_y FROM users WHERE id = ?", ids[i])
-        Qz = db.execute("SELECT score_z FROM users WHERE id = ?", ids[i])
-        Qt = db.execute("SELECT score_t FROM users WHERE id = ?", ids[i])
+        Qx = db.execute("SELECT score_x FROM users WHERE id = ?", ids[i])[0]["score_x"]
+        Qy = db.execute("SELECT score_y FROM users WHERE id = ?", ids[i])[0]["score_y"]
+        Qz = db.execute("SELECT score_z FROM users WHERE id = ?", ids[i])[0]["score_z"]
+        Qt = db.execute("SELECT score_t FROM users WHERE id = ?", ids[i])[0]["score_t"]
 
         eDistance = math.dist([Px, Py, Pz, Pt], [Qx, Qy, Qz, Qt])
         compatability.append(eDistance)
 
     # normalize compatability_scores to get value between 0 and 1
-    normalized = preprocessing.normalize(compatability)
+    print(compatability)
+    normalized = preprocessing.normalize([compatability])[0]
+    # print('GJK', normalized)
 
     # organize usernames and compatability into a dictionary to better represent data
     compatability_dict = {}
-    
+
     for i in range(len(ids)):
-        compatability_dict[ids[i]] = int(100 * (1 - normalized[i]))
+        compatability_dict[ids[i]] = int(100 * math.sqrt((1 - normalized[i])))
 
     # this function returns a dictionary that has every user and the compatability score assigned with that user
 

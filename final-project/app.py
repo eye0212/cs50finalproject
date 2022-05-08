@@ -15,6 +15,7 @@ import PIL
 import os, sys
 
 from helpers import apology, login_required, convertToBinaryData, allowed_file
+from match import categorize, match
 
 # Configure application
 app = Flask(__name__)
@@ -195,8 +196,11 @@ def musicquiz():
 
         # insert answers into sql database   
         db.execute("UPDATE users SET q1 = ?, q2 = ?, q3 = ?, q4 = ?, q5 = ?, q6 = ?, q7 = ?, q8 = ?, q9 = ?, q10 = ? WHERE id = ?", q1_response, q2_response, q3_response, q4_response, q5_response, q6_response, q7_response, q8_response, q9_response, q10_response, session["user_id"])
-
         
+        # run categorize and match functions from match.py
+        input = categorize(session["user_id"])
+        print(input)
+        print(match(input))
 
         mus_list = db.execute("SELECT * FROM users")
         return render_template("musicians.html", mus_list = mus_list)
