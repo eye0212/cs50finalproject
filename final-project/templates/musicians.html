@@ -92,6 +92,7 @@
     <th>Age</th>
     <th>Location</th>
     <th>Email</th>
+    <th>Match Score</th>
     <th>Headshot</th>
   </tr>
     {% for musician in mus_list %}
@@ -100,6 +101,7 @@
             <td>{{ musician.age }}</td>
             <td>{{ musician.location }}</td>
             <td>{{ musician.email }}</td>
+            <td>{{ match_scores.musician.id }}</td>
             <td><img src="/static/images/{{ musician.id }}.png" alt="{{ musician.name }}" height=100 class="centeredimage"></td>
         </tr>
     {% endfor %}

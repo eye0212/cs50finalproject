@@ -148,8 +148,8 @@ def register():
         filename = secure_filename(f'{session["user_id"]}.png')
         file.save(os.path.join(app.root_path, 'static', 'images', filename))
 
-        # Redirect to homepage
-        return redirect("/")
+        # Redirect to music quiz
+        return render_template("musicquiz.html")
 
 
 @app.route("/musicians", methods = ["GET", "POST"])
@@ -157,8 +157,11 @@ def register():
 def musicians():
     """Show eligible musicians"""
     if request.method == "GET":
+        input = categorize(session["user_id"])
+        match_scores = match(input)
+
         mus_list = db.execute("SELECT * FROM users")
-        return render_template("musicians.html", mus_list = mus_list)
+        return render_template("musicians.html", mus_list = mus_list, match_scores = match_scores)
     else:
         # get age, location, and name from current user
         age = request.form.get("age")
@@ -173,7 +176,7 @@ def musicians():
         else: 
             name = f"%{name}%"
         mus_list = db.execute("SELECT * FROM users WHERE name LIKE ? AND age LIKE ? AND location LIKE ?", name, age, location)
-        return render_template("musicians.html", mus_list = mus_list)
+        return render_template("musicians.html", mus_list = mus_list, match_scores = match_scores)
 
 
 @app.route("/musicquiz", methods=['POST', 'GET'])
