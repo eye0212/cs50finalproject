@@ -194,8 +194,10 @@ def musicquiz():
         q10_response = request.form.get('q10')
 
         # insert answers into sql database   
-        db.execute("INSERT INTO users (q1, q2, q3, q4, q5, q6, q7, q8, q9, q10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) WHERE id = ?", q1_response, q2_response, q3_response, q4_response, q5_response, q6_response, q7_response, q8_response, q9_response, q10_response, session["user_id"])
-        return render_template("musicians.html")
+        db.execute("UPDATE users SET q1 = ?, q2 = ?, q3 = ?, q4 = ?, q5 = ?, q6 = ?, q7 = ?, q8 = ?, q9 = ?, q10 = ? WHERE id = ?", q1_response, q2_response, q3_response, q4_response, q5_response, q6_response, q7_response, q8_response, q9_response, q10_response, session["user_id"])
+        
+        mus_list = db.execute("SELECT * FROM users")
+        return render_template("musicians.html", mus_list = mus_list)
 
 # things left to do: 
 # make sure form can take answers

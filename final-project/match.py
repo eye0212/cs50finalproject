@@ -26,43 +26,21 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 
-@app.route("/musicquiz")
-@login_required
-def musicquiz():
-    """Test template for now"""
-
-    q1 = request.form.get("q1")
-    q2 = request.form.get("q2")
-    q3 = request.form.get("q3")
-    q4 = request.form.get("q4")
-    q5 = request.form.get("q5")
-    q6 = request.form.get("q6")
-    q7 = request.form.get("q7")
-    q8 = request.form.get("q8")
-    q9 = request.form.get("q9")
-    q10 = request.form.get("q10")
-
-    mus_list = db.execute("INSERT INTO answers (q1, q2, q3, q4, q5, q6, q7, q8, q9, q10) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", q1, q2, q3, q4, q5, q6, q7, q8, q9, q10)
-
-    return render_template("musicquiz.html", mus_list=mus_list)
-
-
-
-def categorize(username):
+def categorize(id):
 
     # note to fill answer table as well as user table with ids every time new person is made
 
     # get all answers from current user 
-    user_q1 = db.execute("SELECT q1 FROM answers WHERE username LIKE ?", username)
-    user_q2 = db.execute("SELECT q2 FROM answers WHERE username LIKE ?", username)
-    user_q3 = db.execute("SELECT q3 FROM answers WHERE username LIKE ?", username)
-    user_q4 = db.execute("SELECT q4 FROM answers WHERE username LIKE ?", username)
-    user_q5 = db.execute("SELECT q5 FROM answers WHERE username LIKE ?", username)
-    user_q6 = db.execute("SELECT q6 FROM answers WHERE username LIKE ?", username)
-    user_q7 = db.execute("SELECT q7 FROM answers WHERE username LIKE ?", username)
-    user_q8 = db.execute("SELECT q8 FROM answers WHERE username LIKE ?", username)
-    user_q9 = db.execute("SELECT q9 FROM answers WHERE username LIKE ?", username)
-    user_q10 = db.execute("SELECT q10 FROM answers WHERE username LIKE ?", username)
+    user_q1 = db.execute("SELECT q1 FROM users WHERE id = ?", id)
+    user_q2 = db.execute("SELECT q2 FROM users WHERE id = ?", id)
+    user_q3 = db.execute("SELECT q3 FROM users WHERE id = ?", id)
+    user_q4 = db.execute("SELECT q4 FROM users WHERE id = ?", id)
+    user_q5 = db.execute("SELECT q5 FROM users WHERE id = ?", id)
+    user_q6 = db.execute("SELECT q6 FROM users WHERE id = ?", id)
+    user_q7 = db.execute("SELECT q7 FROM users WHERE id = ?", id)
+    user_q8 = db.execute("SELECT q8 FROM users WHERE id = ?", id)
+    user_q9 = db.execute("SELECT q9 FROM users WHERE id = ?", id)
+    user_q10 = db.execute("SELECT q10 FROM users WHERE id = ?", id)
 
     # put answers into a list for easier processing 
     answers = [
@@ -114,10 +92,10 @@ def match(score):
         Pz = score[2]
         Pt = score[3]
 
-        Qx = db.execute("SELECT score_x FROM answers WHERE username LIKE ?", usernames[i])
-        Qy = db.execute("SELECT score_y FROM answers WHERE username LIKE ?", usernames[i])
-        Qz = db.execute("SELECT score_z FROM answers WHERE username LIKE ?", usernames[i])
-        Qt = db.execute("SELECT score_t FROM answers WHERE username LIKE ?", usernames[i])
+        Qx = db.execute("SELECT score_x FROM users WHERE username LIKE ?", usernames[i])
+        Qy = db.execute("SELECT score_y FROM users WHERE username LIKE ?", usernames[i])
+        Qz = db.execute("SELECT score_z FROM users WHERE username LIKE ?", usernames[i])
+        Qt = db.execute("SELECT score_t FROM users WHERE username LIKE ?", usernames[i])
 
         eDistance = math.dist([Px, Py, Pz, Pt], [Qx, Qy, Qz, Qt])
         compatability.append(eDistance)
