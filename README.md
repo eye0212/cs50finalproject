@@ -1,6 +1,6 @@
 # cs50finalproject
 
-**Subito** is a web app implemented using Flask, jinja, and bootstrap that matches users based on their classical music preferences.
+**Subito** is a web app implemented using Flask, jinja, and bootstrap that matches users based on their classical music preferences - designed to bring musicians together online. Our website includes a quiz designed to characterize users’ preferences as a function of 4 key variables, and then provides them with scores ranking the compatibility of their tastes with respect to other users.
 
 ![index page](final-project/static/images/readme3.png?raw=true)
 
