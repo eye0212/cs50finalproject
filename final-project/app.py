@@ -176,7 +176,7 @@ def musicians():
             name = f"%{name}%"
         input = categorize(session["user_id"])
         match_scores = match(input)
-        mus_list = db.execute("SELECT * FROM users WHERE name LIKE ? AND age LIKE ? AND location LIKE ?", name, age, location)
+        mus_list = db.execute("SELECT * FROM users WHERE name LIKE ? AND age LIKE ? AND location LIKE ? AND id <> ?", name, age, location, session["user_id"])
         return render_template("musicians.html", mus_list = mus_list, match_scores = match_scores)
 
 @app.route("/profile", methods = ["GET"])
@@ -213,7 +213,7 @@ def musicquiz():
         input = categorize(session["user_id"])
         match_scores = match(input)
 
-        mus_list = db.execute("SELECT * FROM users")
+        mus_list = db.execute("SELECT * FROM users WHERE id <> ?", session["user_id"])
 
         print(mus_list)
         print(match_scores)
