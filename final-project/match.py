@@ -71,17 +71,16 @@ def categorize(id):
     # this function assigns every person a score in R4 and returns it after putting it into the SQL 
     # database table called answers
 
-    db.execute("UPDATE answers SET score_x = ?, score_y = ?, score_z = ?, score_t = ? WHERE username = ?", score[0], score[1], score[2], score[3], username)
-
+    db.execute("UPDATE users SET score_x = ?, score_y = ?, score_z = ?, score_t = ? WHERE id = ?", score[0], score[1], score[2], score[3], id)
     return score
 
 def match(score):
 
     #number of users
 
-    users_num = db.execute("SELECT COUNT(id) as count_pet FROM answers")
+    users_num = db.execute("SELECT COUNT(*) FROM users")
 
-    usernames = list(db.execute("SELECT username FROM answers"))
+    ids = list(db.execute("SELECT id FROM users"))
 
     compatability = []
 
@@ -92,10 +91,10 @@ def match(score):
         Pz = score[2]
         Pt = score[3]
 
-        Qx = db.execute("SELECT score_x FROM users WHERE username LIKE ?", usernames[i])
-        Qy = db.execute("SELECT score_y FROM users WHERE username LIKE ?", usernames[i])
-        Qz = db.execute("SELECT score_z FROM users WHERE username LIKE ?", usernames[i])
-        Qt = db.execute("SELECT score_t FROM users WHERE username LIKE ?", usernames[i])
+        Qx = db.execute("SELECT score_x FROM users WHERE id = ?", ids[i])
+        Qy = db.execute("SELECT score_y FROM users WHERE id = ?", ids[i])
+        Qz = db.execute("SELECT score_z FROM users WHERE id = ?", ids[i])
+        Qt = db.execute("SELECT score_t FROM users WHERE id = ?", ids[i])
 
         eDistance = math.dist([Px, Py, Pz, Pt], [Qx, Qy, Qz, Qt])
         compatability.append(eDistance)
@@ -106,8 +105,8 @@ def match(score):
     # organize usernames and compatability into a dictionary to better represent data
     compatability_dict = {}
     
-    for i in range(len(usernames)):
-        compatability_dict[usernames[i]] = normalized[i]
+    for i in range(len(id)):
+        compatability_dict[id[i]] = int(100 * (1 - normalized[i]))
 
     # this function returns a dictionary that has every user and the compatability score assigned with that user
 
