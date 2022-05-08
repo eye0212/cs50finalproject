@@ -24,3 +24,10 @@ After taking the musician quiz, the web app will direct you to the musicians pag
 
 
 My Profile
+
+In this page, the user can see their own information including their name, age, location, email, and head shot.
+
+
+Log Out
+
+This button logs the user out of their current session. 
