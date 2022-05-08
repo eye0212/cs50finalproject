@@ -18,8 +18,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-
+# Checks to see if uploaded file is in fact an image
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

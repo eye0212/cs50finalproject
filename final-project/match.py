@@ -9,6 +9,9 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import math
 from sklearn import preprocessing
 
+# Configure CS50 Library to use SQLite database
+db = SQL("sqlite:///database.db")
+
 
 def categorize(id):
 

@@ -76,7 +76,6 @@ def login():
             flash('invalid username and/or password')
             return render_template("login.html")
 
-
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
 
