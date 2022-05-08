@@ -184,7 +184,7 @@ def musicians():
         else: 
             name = f"%{name}%"
 
-        # Calculate match scores
+        # Upload match scores and filter info to HTML
         input = categorize(session["user_id"])
         match_scores = match(input)
         mus_list = db.execute("SELECT * FROM users WHERE name LIKE ? AND age LIKE ? AND location LIKE ? AND id <> ?", name, age, location, session["user_id"])
@@ -193,7 +193,7 @@ def musicians():
 @app.route("/profile", methods = ["GET"])
 @login_required
 def profile():
-    """Show eligible musicians"""
+    # Display only information about current user
     if request.method == "GET":
         mus_list = db.execute("SELECT * FROM users WHERE id = ?", session["user_id"])
         return render_template("profile.html", mus_list = mus_list)
