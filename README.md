@@ -2,7 +2,7 @@
 
 Subito is a web app implemented using Flask, jinja, and bootstrap that matches users based on their classical music preferences.
 
-![Alt text](relative/path/to/img.jpg?raw=true "Title")
+![index page](/static/images/readme3.png?raw=true "Title")
 
 User Instructions
 
