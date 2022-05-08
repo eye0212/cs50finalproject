@@ -1,7 +1,6 @@
 from ast import BinOp
 import os
 
-# test
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session, url_for
@@ -184,7 +183,7 @@ def musicians():
         else: 
             name = f"%{name}%"
 
-        # Upload match scores and filter info to HTML
+        # Upload match scores and filter info to HTML and render musicians page
         input = categorize(session["user_id"])
         match_scores = match(input)
         mus_list = db.execute("SELECT * FROM users WHERE name LIKE ? AND age LIKE ? AND location LIKE ? AND id <> ?", name, age, location, session["user_id"])
@@ -193,8 +192,9 @@ def musicians():
 @app.route("/profile", methods = ["GET"])
 @login_required
 def profile():
-    # Display only information about current user
     if request.method == "GET":
+
+        # Display only information about current user
         mus_list = db.execute("SELECT * FROM users WHERE id = ?", session["user_id"])
         return render_template("profile.html", mus_list = mus_list)
 
@@ -224,15 +224,8 @@ def musicquiz():
         input = categorize(session["user_id"])
         match_scores = match(input)
 
+        # Upload match scores and filter info to HTML and render musicians page
         mus_list = db.execute("SELECT * FROM users WHERE id <> ?", session["user_id"])
-
         print(mus_list)
         print(match_scores)
         return render_template("musicians.html", mus_list = mus_list, match_scores = match_scores)
-
-# things left to do: 
-# make sure form can take answers
-# make sure algorithm works and can provide match scores by 1. pulling from sql and 2. uploading the scores into sql
-# make sure new users' information is also added to the answers database
-# make sure the user can see the results of their quiz, make questions for the quiz
-# maybe make a profile page, maybe make a 
