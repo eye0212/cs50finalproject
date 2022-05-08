@@ -14,9 +14,6 @@ db = SQL("sqlite:///database.db")
 
 
 def categorize(id):
-
-    # note to fill answer table as well as user table with ids every time new person is made
-
     # get all answers from current user 
     user_q1 = db.execute("SELECT q1 FROM users WHERE id = ?", id)[0]["q1"]
     user_q2 = db.execute("SELECT q2 FROM users WHERE id = ?", id)[0]["q2"]
@@ -55,18 +52,16 @@ def categorize(id):
         if answer == "d":
             score[3] += 1
 
-    # this function assigns every person a score in R4 and returns it after putting it into the SQL 
-    # database table called answers
-
+    # this function assigns every person a score in R4 and returns it after putting it into the database 
     db.execute("UPDATE users SET score_x = ?, score_y = ?, score_z = ?, score_t = ? WHERE id = ?", score[0], score[1], score[2], score[3], id)
     return score
 
 def match(score):
 
-    #number of users
-
+    # number of users
     users_num = db.execute("SELECT COUNT(*) FROM users")[0]["COUNT(*)"]
 
+    # add the relevant ids to a list
     lis = db.execute("SELECT id FROM users")
     ids = []
     for id in lis:
