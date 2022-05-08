@@ -105,8 +105,8 @@ def match(score):
     # organize usernames and compatability into a dictionary to better represent data
     compatability_dict = {}
     
-    for i in range(len(id)):
-        compatability_dict[id[i]] = int(100 * (1 - normalized[i]))
+    for i in range(len(ids)):
+        compatability_dict[ids[i]] = int(100 * (1 - normalized[i]))
 
     # this function returns a dictionary that has every user and the compatability score assigned with that user
 
