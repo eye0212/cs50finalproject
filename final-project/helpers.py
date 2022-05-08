@@ -5,22 +5,6 @@ import urllib.parse
 from flask import redirect, render_template, request, session
 from functools import wraps
 
-
-def apology(message, code=400):
-    """Render message as an apology to user."""
-    def escape(s):
-        """
-        Escape special characters.
-
-        https://github.com/jacebrowning/memegen#special-characters
-        """
-        for old, new in [("-", "--"), (" ", "-"), ("_", "__"), ("?", "~q"),
-                         ("%", "~p"), ("#", "~h"), ("/", "~s"), ("\"", "''")]:
-            s = s.replace(old, new)
-        return s
-    return render_template("apology.html", top=code, bottom=escape(message)), code
-
-
 def login_required(f):
     """
     Decorate routes to require login.
@@ -34,12 +18,6 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-
-def convertToBinaryData(filename): # Adapted from https://www.geeksforgeeks.org/how-to-insert-image-in-sqlite-using-python/:
-  # Convert binary format to images or files data
-  with open(filename, 'rb') as file:
-      blobData = file.read()
-  return blobData
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 

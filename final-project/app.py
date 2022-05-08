@@ -14,7 +14,7 @@ from PIL import Image
 import PIL 
 import os, sys
 
-from helpers import apology, login_required, convertToBinaryData, allowed_file
+from helpers import login_required, allowed_file
 from match import categorize, match
 
 # Configure application
@@ -33,9 +33,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 # Prepare app.py for file upload
 UPLOAD_FOLDER = '/static/images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 Session(app)
-
 
 @app.after_request
 def after_request(response):
@@ -45,11 +43,9 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-
 @app.route("/")
 @login_required
 def index():
-
     return render_template("index.html")
 
 
@@ -65,18 +61,22 @@ def login():
 
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 400)
+            flash('must provide username')
+            return render_template("login.html")
 
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 400)
+            flash('must provide password')
+            return render_template("login.html")
 
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
 
         # Ensure username exists and password is correct
         if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
-            return apology("invalid username and/or password", 400)
+            flash('invalid username and/or password')
+            return render_template("login.html")
+
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
@@ -138,7 +138,8 @@ def register():
 
         # Check to make sure file is right format:
         if not allowed_file(file.filename):
-            return apology("not allowed file", 400)
+            flash('not allowed file')
+            return render_template("login.html")
     
         # Set session to user ID
         db.execute("INSERT INTO users (username, hash, email, age, location, name) VALUES (?, ?, ?, ?, ?, ?)", username, generate_password_hash(password), email, age, location, name)
@@ -149,23 +150,31 @@ def register():
         file.save(os.path.join(app.root_path, 'static', 'images', filename))
 
         # Redirect to music quiz
-        return render_template("musicquiz.html")
+        return render_template("musicquiz_2.html")
 
 
 @app.route("/musicians", methods = ["GET", "POST"])
 @login_required
 def musicians():
-    """Show eligible musicians"""
+    # Show a list of musicians who aren't the user
     if request.method == "GET":
+        
+        # Calculate match scores
         input = categorize(session["user_id"])
         match_scores = match(input)
+
+        # Retrieve list
         mus_list = db.execute("SELECT * FROM users WHERE id <> ?", session["user_id"])
+
+        # Render template
         return render_template("musicians.html", mus_list = mus_list, match_scores = match_scores)
     else:
         # get age, location, and name from current user
         age = request.form.get("age")
         location = request.form.get("location")
         name = request.form.get("name")
+
+        # If not specified, search for anything
         if not age:
             age = "%%"
         if not location:
@@ -174,6 +183,8 @@ def musicians():
             name = "%%"
         else: 
             name = f"%{name}%"
+
+        # Calculate match scores
         input = categorize(session["user_id"])
         match_scores = match(input)
         mus_list = db.execute("SELECT * FROM users WHERE name LIKE ? AND age LIKE ? AND location LIKE ? AND id <> ?", name, age, location, session["user_id"])
