@@ -151,13 +151,13 @@ def register():
         return redirect("/")
 
 
-@app.route("/musicians", methods=["GET", "POST"])
+@app.route("/musicians", methods = ["GET", "POST"])
 @login_required
 def musicians():
     """Show eligible musicians"""
     if request.method == "GET":
         mus_list = db.execute("SELECT * FROM users")
-        return render_template("musicians.html", mus_list=mus_list)
+        return render_template("musicians.html", mus_list = mus_list)
     else:
         # get age, location, and name from current user
         age = request.form.get("age")
@@ -172,7 +172,7 @@ def musicians():
         else: 
             name = f"%{name}%"
         mus_list = db.execute("SELECT * FROM users WHERE name LIKE ? AND age LIKE ? AND location LIKE ?", name, age, location)
-        return render_template("musicians.html", mus_list=mus_list)
+        return render_template("musicians.html", mus_list = mus_list)
 
 
 @app.route("/musicquiz", methods=['POST', 'GET'])
@@ -181,26 +181,21 @@ def musicquiz():
     if request.method == 'GET':
         return render_template("musicquiz.html")
     else:
-
         # get responses form current user when they take the musician quiz
-        q1_response = request.form['q1']
-        q2_response = request.form['q2']
-        q3_response = request.form['q3']
-        q4_response = request.form['q4']
-        q5_response = request.form['q5']
-        q6_response = request.form['q6']
-        q7_response = request.form['q7']
-        q8_response = request.form['q8']
-        q9_response = request.form['q9']
-        q10_response = request.form['q10']
-
-        username = request.form.get("username")     
+        q1_response = request.form.get('q1')
+        q2_response = request.form.get('q2')
+        q3_response = request.form.get('q3')
+        q4_response = request.form.get('q4')
+        q5_response = request.form.get('q5')
+        q6_response = request.form.get('q6')
+        q7_response = request.form.get('q7')
+        q8_response = request.form.get('q8')
+        q9_response = request.form.get('q9')
+        q10_response = request.form.get('q10')
 
         # insert answers into sql database   
-        ans_list = db.execute("INSERT INTO answers (q1, q2, q3, q4, q5, q6, q7, q8, q9, 10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) WHERE username LIKE ", q1_response, q2_response, q3_response, q4_response, q5_response, q6_response, q7_response, q8_response, q9_response, q10_response, username)
-        session["user_id"] = db.execute("SELECT id FROM users WHERE username = ?", username)[0]["id"] # not sure if this is necessary review with Alex and if so implement into match and score functions in match.py
-        
-        return render_template("musicians.html", ans_list = ans_list) # i'm really not sure what this does but the form won't submit right now
+        db.execute("INSERT INTO users (q1, q2, q3, q4, q5, q6, q7, q8, q9, q10) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) WHERE id = ?", q1_response, q2_response, q3_response, q4_response, q5_response, q6_response, q7_response, q8_response, q9_response, q10_response, session["user_id"])
+        return render_template("musicians.html")
 
 # things left to do: 
 # make sure form can take answers
