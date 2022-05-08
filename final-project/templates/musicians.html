@@ -101,7 +101,7 @@
             <td>{{ musician.age }}</td>
             <td>{{ musician.location }}</td>
             <td>{{ musician.email }}</td>
-            <td>{{ match_scores.musician.id }}</td>
+            <td>{{ match_scores[musician.id] }}</td>
             <td><img src="/static/images/{{ musician.id }}.png" alt="{{ musician.name }}" height=100 class="centeredimage"></td>
         </tr>
     {% endfor %}

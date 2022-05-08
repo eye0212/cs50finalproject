@@ -159,8 +159,7 @@ def musicians():
     if request.method == "GET":
         input = categorize(session["user_id"])
         match_scores = match(input)
-
-        mus_list = db.execute("SELECT * FROM users")
+        mus_list = db.execute("SELECT * FROM users WHERE id <> ?", session["user_id"])
         return render_template("musicians.html", mus_list = mus_list, match_scores = match_scores)
     else:
         # get age, location, and name from current user
@@ -175,8 +174,18 @@ def musicians():
             name = "%%"
         else: 
             name = f"%{name}%"
+        input = categorize(session["user_id"])
+        match_scores = match(input)
         mus_list = db.execute("SELECT * FROM users WHERE name LIKE ? AND age LIKE ? AND location LIKE ?", name, age, location)
         return render_template("musicians.html", mus_list = mus_list, match_scores = match_scores)
+
+@app.route("/profile", methods = ["GET"])
+@login_required
+def profile():
+    """Show eligible musicians"""
+    if request.method == "GET":
+        mus_list = db.execute("SELECT * FROM users WHERE id = ?", session["user_id"])
+        return render_template("profile.html", mus_list = mus_list)
 
 
 @app.route("/musicquiz", methods=['POST', 'GET'])
@@ -202,11 +211,13 @@ def musicquiz():
         
         # run categorize and match functions from match.py
         input = categorize(session["user_id"])
-        print(input)
-        print(match(input))
+        match_scores = match(input)
 
         mus_list = db.execute("SELECT * FROM users")
-        return render_template("musicians.html", mus_list = mus_list)
+
+        print(mus_list)
+        print(match_scores)
+        return render_template("musicians.html", mus_list = mus_list, match_scores = match_scores)
 
 # things left to do: 
 # make sure form can take answers

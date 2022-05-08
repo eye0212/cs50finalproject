@@ -81,7 +81,6 @@ def match(score):
     users_num = db.execute("SELECT COUNT(*) FROM users")[0]["COUNT(*)"]
 
     lis = db.execute("SELECT id FROM users")
-    print(lis)
     ids = []
     for id in lis:
         ids.append(id["id"])
@@ -114,6 +113,5 @@ def match(score):
     for i in range(len(ids)):
         compatability_dict[ids[i]] = int(100 * math.sqrt((1 - normalized[i])))
 
-    # this function returns a dictionary that has every user and the compatability score assigned with that user
-
+    # this function returns a dictionary that has every user and the compatability score assigned with that user (between 0 and 100)
     return compatability_dict

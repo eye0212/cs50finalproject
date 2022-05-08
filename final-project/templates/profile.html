@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+<h3>
+    My Profile
+</h3>
+
+<table class="table tablestriped" id="myTable"> 
+  <tr class="header">
+    <th>Name</th>
+    <th>Age</th>
+    <th>Location</th>
+    <th>Email</th>
+    <th>Headshot</th>
+  </tr>
+    {% for musician in mus_list %}
+        <tr>
+            <td>{{ musician.name }}</td>
+            <td>{{ musician.age }}</td>
+            <td>{{ musician.location }}</td>
+            <td>{{ musician.email }}</td>
+            <td><img src="/static/images/{{ musician.id }}.png" alt="{{ musician.name }}" height=300 class="centeredimage"></td>
+        </tr>
+    {% endfor %}
+</table>
+
+
+
+    
+{% endblock %}
